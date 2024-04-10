@@ -17,9 +17,7 @@
  *   getCurrentFunctionName() => 'getCurrentFunctionName'
  *
  */
-function getCurrentFunctionName() {
-  return getCurrentFunctionName.name;
-}
+const getCurrentFunctionName = () => getCurrentFunctionName.name;
 
 /**
  * Returns the body of the function passed as argument.
@@ -32,9 +30,7 @@ function getCurrentFunctionName() {
  *   getFunctionBody(hiHello) => "function hiHello() { console.log('hello world'); }"
  *
  */
-function getFunctionBody(func) {
-  return func ? func.toString() : '';
-}
+const getFunctionBody = (func) => (func ? func.toString() : '');
 
 /**
  * Returns the array where each element is the count of function arguments.
@@ -50,9 +46,7 @@ function getFunctionBody(func) {
  *  ]) => [0, 1, 2]
  *
  */
-function getArgumentsCount(funcs) {
-  return funcs.map((func) => func.length);
-}
+const getArgumentsCount = (funcs) => funcs.map((func) => func.length);
 
 /**
  * Returns the math power function with the specified exponent
@@ -70,9 +64,7 @@ function getArgumentsCount(funcs) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(exponent) {
-  return (arg) => arg ** exponent;
-}
+const getPowerFunction = (exponent) => (arg) => arg ** exponent;
 
 /**
  * Returns the polynom function of one argument based on specified coefficients.
@@ -87,12 +79,15 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom(/* ...args */) {
-  throw new Error('Not implemented');
-
-  // const [c = 0, b = 0, a = 0] = args;
-  // return (x) => args[0] * x ** 2 + args[1] * x + args[2];
-}
+const getPolynom = (...args) =>
+  args.length === 0
+    ? null
+    : (x) =>
+        args.reduce(
+          (accumulator, item, index) =>
+            accumulator + item * x ** (args.length - index - 1),
+          0
+        );
 
 /**
  * Memoizes passed function and returns function
@@ -108,14 +103,10 @@ function getPolynom(/* ...args */) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(func) {
-  let ceshe;
-
-  return () => {
-    if (!ceshe) ceshe = func();
-    return ceshe;
-  };
-}
+const memoize =
+  (func, ceshe = func()) =>
+  () =>
+    ceshe;
 
 /**
  * Returns the function trying to call the passed function and if it throws,
@@ -132,8 +123,8 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(func, attempts) {
-  return function f() {
+const retry = (func, attempts) =>
+  function f() {
     try {
       return func();
     } catch (err) {
@@ -141,7 +132,6 @@ function retry(func, attempts) {
       return null;
     }
   };
-}
 
 /**
  * Returns the logging wrapper for the specified method,
@@ -166,19 +156,17 @@ function retry(func, attempts) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(func, logFunc) {
-  return (...args) => {
-    const log = args.map((val) => JSON.stringify(val));
-
-    logFunc(`${func.name}(${log}) starts`);
+const logger =
+  (func, logFunc) =>
+  (...args) => {
+    logFunc(`${func.name}(${args.map((val) => JSON.stringify(val))}) starts`);
 
     const res = func(...args);
 
-    logFunc(`${func.name}(${log}) ends`);
+    logFunc(`${func.name}(${args.map((val) => JSON.stringify(val))}) ends`);
 
     return res;
   };
-}
 
 /**
  * Return the function with partial applied arguments
@@ -193,9 +181,10 @@ function logger(func, logFunc) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
-}
+const partialUsingArguments =
+  (fn, ...args1) =>
+  (...args2) =>
+    fn(...args1, ...args2);
 
 /**
  * Returns the id generator function that returns next integer starting
@@ -214,8 +203,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let start = startFrom - 1;
+  return () => {
+    start += 1;
+    return start;
+  };
 }
 
 module.exports = {
