@@ -168,15 +168,15 @@ function retry(func, attempts) {
  */
 function logger(func, logFunc) {
   return (...args) => {
-    const log = args.map((val) => JSON.stringify(val)).join(',');
+    const log = args.map((val) => JSON.stringify(val));
 
     logFunc(`${func.name}(${log}) starts`);
 
-    const result = func(...args);
+    const res = func(...args);
 
     logFunc(`${func.name}(${log}) ends`);
 
-    return result;
+    return res;
   };
 }
 
